@@ -1,6 +1,12 @@
+
+import { configDotenv } from 'dotenv';
 import { Sequelize } from 'sequelize'
 
 export default (() => {
+
+    configDotenv({
+        quiet: true
+    });
 
     return new Sequelize(
         process.env.POSTGRES_DB,

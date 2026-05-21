@@ -1,9 +1,10 @@
-import UserModel from "../../Models/UserModel.js";
+import UserModel from "../../../Models/UserModel.js";
+import bcrypt from "bcrypt";
 
 export default async function UpdateUserController(request, response) {
     try {
         const { id } = request.params;
-        const { name, email } = request.body;
+        const { name, email, password } = request.body;
 
         if (!name || !email) {
             return response.status(400).json({
@@ -21,6 +22,11 @@ export default async function UpdateUserController(request, response) {
 
         user.name = name;
         user.email = email;
+
+        // Se password foi fornecido, criptografa e atualiza
+        if (password) {
+            user.password = await bcrypt.hash(password, 10);
+        }
 
         await user.save();
 

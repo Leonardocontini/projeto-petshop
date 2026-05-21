@@ -1,0 +1,663 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-05-21T15:36:04.161Z",
+  "__export_source": "chatgpt.generated:insomnia",
+  "resources": [
+    {
+      "_id": "wrk_d23ac348625a43dfac26175c",
+      "_type": "workspace",
+      "name": "API DevWeb",
+      "description": "Collection Insomnia gerada a partir dos 4 OpenAPI JSONs corrigindo os Content-Types.",
+      "scope": "collection"
+    },
+    {
+      "_id": "env_a133002e38f24b0983572376",
+      "_type": "environment",
+      "parentId": "wrk_d23ac348625a43dfac26175c",
+      "name": "Base Environment",
+      "data": {
+        "base_url": "http://localhost:3000",
+        "token": ""
+      },
+      "dataPropertyOrder": {
+        "&": [
+          "base_url",
+          "token"
+        ]
+      },
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": 0
+    },
+    {
+      "_id": "jar_89c19a7d8ba641598246f073",
+      "_type": "cookie_jar",
+      "parentId": "wrk_d23ac348625a43dfac26175c",
+      "name": "Default Jar",
+      "cookies": []
+    },
+    {
+      "_id": "fld_3a79532627e14637af42b103",
+      "_type": "request_group",
+      "parentId": "wrk_d23ac348625a43dfac26175c",
+      "name": "Address",
+      "description": "API de endereços - CRUD completo",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 0
+    },
+    {
+      "_id": "req_3d7d9d217ce742af9f32c801",
+      "_type": "request",
+      "parentId": "fld_3a79532627e14637af42b103",
+      "name": "Listar endereços",
+      "description": "",
+      "method": "GET",
+      "url": "{{ _.base_url }}/addresses",
+      "parameters": [
+        {
+          "name": "page",
+          "value": "1",
+          "disabled": false
+        },
+        {
+          "name": "limit",
+          "value": "10",
+          "disabled": false
+        }
+      ],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.token }}",
+          "disabled": false
+        }
+      ],
+      "authentication": {},
+      "body": {},
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "metaSortKey": 0
+    },
+    {
+      "_id": "req_77d663daeffb44c1b1ee234e",
+      "_type": "request",
+      "parentId": "fld_3a79532627e14637af42b103",
+      "name": "Criar endereço",
+      "description": "",
+      "method": "POST",
+      "url": "{{ _.base_url }}/addresses",
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json",
+          "disabled": false
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.token }}",
+          "disabled": false
+        }
+      ],
+      "authentication": {},
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"id_user\": 1,\n  \"name\": \"Nome de teste\",\n  \"district\": \"Centro\",\n  \"city\": \"Atibaia\"\n}"
+      },
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "metaSortKey": 0
+    },
+    {
+      "_id": "req_5e3ad6ab995c4d80b616aec7",
+      "_type": "request",
+      "parentId": "fld_3a79532627e14637af42b103",
+      "name": "Obter endereço",
+      "description": "",
+      "method": "GET",
+      "url": "{{ _.base_url }}/addresses/1",
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.token }}",
+          "disabled": false
+        }
+      ],
+      "authentication": {},
+      "body": {},
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "metaSortKey": 0
+    },
+    {
+      "_id": "req_acf2ced1252d42e1b87b14e0",
+      "_type": "request",
+      "parentId": "fld_3a79532627e14637af42b103",
+      "name": "Atualizar endereço",
+      "description": "",
+      "method": "PUT",
+      "url": "{{ _.base_url }}/addresses/1",
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json",
+          "disabled": false
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.token }}",
+          "disabled": false
+        }
+      ],
+      "authentication": {},
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"id_user\": 1,\n  \"name\": \"Nome de teste\",\n  \"district\": \"Centro\",\n  \"city\": \"Atibaia\"\n}"
+      },
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "metaSortKey": 0
+    },
+    {
+      "_id": "req_d752bd43da2e434f8c26d38d",
+      "_type": "request",
+      "parentId": "fld_3a79532627e14637af42b103",
+      "name": "Deletar endereço",
+      "description": "",
+      "method": "DELETE",
+      "url": "{{ _.base_url }}/addresses/1",
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.token }}",
+          "disabled": false
+        }
+      ],
+      "authentication": {},
+      "body": {},
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "metaSortKey": 0
+    },
+    {
+      "_id": "fld_0571245957c34745a6ce208c",
+      "_type": "request_group",
+      "parentId": "wrk_d23ac348625a43dfac26175c",
+      "name": "Course",
+      "description": "API de cursos - CRUD completo",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 0
+    },
+    {
+      "_id": "req_509ffeeff2424d3b99ef92dd",
+      "_type": "request",
+      "parentId": "fld_0571245957c34745a6ce208c",
+      "name": "Listar cursos",
+      "description": "",
+      "method": "GET",
+      "url": "{{ _.base_url }}/courses",
+      "parameters": [
+        {
+          "name": "page",
+          "value": "1",
+          "disabled": false
+        },
+        {
+          "name": "limit",
+          "value": "10",
+          "disabled": false
+        }
+      ],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.token }}",
+          "disabled": false
+        }
+      ],
+      "authentication": {},
+      "body": {},
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "metaSortKey": 0
+    },
+    {
+      "_id": "req_622fcbd28f0e451d974ffca4",
+      "_type": "request",
+      "parentId": "fld_0571245957c34745a6ce208c",
+      "name": "Criar curso",
+      "description": "",
+      "method": "POST",
+      "url": "{{ _.base_url }}/courses",
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json",
+          "disabled": false
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.token }}",
+          "disabled": false
+        }
+      ],
+      "authentication": {},
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Nome de teste\",\n  \"professor\": \"Professor Teste\"\n}"
+      },
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "metaSortKey": 0
+    },
+    {
+      "_id": "req_7c87411d45704cff9c877d4b",
+      "_type": "request",
+      "parentId": "fld_0571245957c34745a6ce208c",
+      "name": "Obter curso",
+      "description": "",
+      "method": "GET",
+      "url": "{{ _.base_url }}/courses/1",
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.token }}",
+          "disabled": false
+        }
+      ],
+      "authentication": {},
+      "body": {},
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "metaSortKey": 0
+    },
+    {
+      "_id": "req_aa6a2aa27c8b4006ad645082",
+      "_type": "request",
+      "parentId": "fld_0571245957c34745a6ce208c",
+      "name": "Atualizar curso",
+      "description": "",
+      "method": "PUT",
+      "url": "{{ _.base_url }}/courses/1",
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json",
+          "disabled": false
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.token }}",
+          "disabled": false
+        }
+      ],
+      "authentication": {},
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Nome de teste\",\n  \"professor\": \"Professor Teste\"\n}"
+      },
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "metaSortKey": 0
+    },
+    {
+      "_id": "req_7f6efdf6ea8345b08d483a51",
+      "_type": "request",
+      "parentId": "fld_0571245957c34745a6ce208c",
+      "name": "Deletar curso",
+      "description": "",
+      "method": "DELETE",
+      "url": "{{ _.base_url }}/courses/1",
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.token }}",
+          "disabled": false
+        }
+      ],
+      "authentication": {},
+      "body": {},
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "metaSortKey": 0
+    },
+    {
+      "_id": "fld_0e967b98be41453fbef09b92",
+      "_type": "request_group",
+      "parentId": "wrk_d23ac348625a43dfac26175c",
+      "name": "Login",
+      "description": "Endpoint de login via email e senha",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 0
+    },
+    {
+      "_id": "req_c853006e60d449df98da312f",
+      "_type": "request",
+      "parentId": "fld_0e967b98be41453fbef09b92",
+      "name": "Autenticar usuário",
+      "description": "",
+      "method": "POST",
+      "url": "{{ _.base_url }}/login",
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/x-www-form-urlencoded",
+          "disabled": false
+        }
+      ],
+      "authentication": {},
+      "body": {
+        "mimeType": "application/x-www-form-urlencoded",
+        "params": [
+          {
+            "name": "email",
+            "value": "teste@email.com",
+            "disabled": false
+          },
+          {
+            "name": "password",
+            "value": "123456",
+            "disabled": false
+          }
+        ]
+      },
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "metaSortKey": 0
+    },
+    {
+      "_id": "fld_34356822f3744743a7af1aca",
+      "_type": "request_group",
+      "parentId": "wrk_d23ac348625a43dfac26175c",
+      "name": "User",
+      "description": "API de usuários - operações CRUD e vinculação de cursos",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 0
+    },
+    {
+      "_id": "req_65845633fb9c4471862a285c",
+      "_type": "request",
+      "parentId": "fld_34356822f3744743a7af1aca",
+      "name": "Listar usuários",
+      "description": "Retorna uma lista paginada de usuários",
+      "method": "GET",
+      "url": "{{ _.base_url }}/users",
+      "parameters": [
+        {
+          "name": "page",
+          "value": "1",
+          "disabled": false
+        },
+        {
+          "name": "limit",
+          "value": "10",
+          "disabled": false
+        }
+      ],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.token }}",
+          "disabled": false
+        }
+      ],
+      "authentication": {},
+      "body": {},
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "metaSortKey": 0
+    },
+    {
+      "_id": "req_256b4e2edc5f42b09491404b",
+      "_type": "request",
+      "parentId": "fld_34356822f3744743a7af1aca",
+      "name": "Criar usuário",
+      "description": "Cria um novo usuário com email, nome e senha",
+      "method": "POST",
+      "url": "{{ _.base_url }}/users",
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json",
+          "disabled": false
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.token }}",
+          "disabled": false
+        }
+      ],
+      "authentication": {},
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Nome de teste\",\n  \"email\": \"teste@email.com\",\n  \"password\": \"123456\"\n}"
+      },
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "metaSortKey": 0
+    },
+    {
+      "_id": "req_d04eb352623a40899552bf4a",
+      "_type": "request",
+      "parentId": "fld_34356822f3744743a7af1aca",
+      "name": "Obter usuário",
+      "description": "",
+      "method": "GET",
+      "url": "{{ _.base_url }}/users/1",
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.token }}",
+          "disabled": false
+        }
+      ],
+      "authentication": {},
+      "body": {},
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "metaSortKey": 0
+    },
+    {
+      "_id": "req_a43ae5a98b634a92af7cb8b1",
+      "_type": "request",
+      "parentId": "fld_34356822f3744743a7af1aca",
+      "name": "Atualizar usuário",
+      "description": "",
+      "method": "PUT",
+      "url": "{{ _.base_url }}/users/1",
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json",
+          "disabled": false
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.token }}",
+          "disabled": false
+        }
+      ],
+      "authentication": {},
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Nome de teste\",\n  \"email\": \"teste@email.com\",\n  \"password\": \"123456\"\n}"
+      },
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "metaSortKey": 0
+    },
+    {
+      "_id": "req_a9ebbcd4ca5244fe82871336",
+      "_type": "request",
+      "parentId": "fld_34356822f3744743a7af1aca",
+      "name": "Deletar usuário",
+      "description": "",
+      "method": "DELETE",
+      "url": "{{ _.base_url }}/users/1",
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.token }}",
+          "disabled": false
+        }
+      ],
+      "authentication": {},
+      "body": {},
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "metaSortKey": 0
+    },
+    {
+      "_id": "req_efad3d8597b64a43b9542dde",
+      "_type": "request",
+      "parentId": "fld_34356822f3744743a7af1aca",
+      "name": "Adicionar cursos a usuário",
+      "description": "Associa múltiplos cursos ao usuário via tabela pivot",
+      "method": "POST",
+      "url": "{{ _.base_url }}/users/add-course/1",
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json",
+          "disabled": false
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.token }}",
+          "disabled": false
+        }
+      ],
+      "authentication": {},
+      "body": {
+        "mimeType": "application/json",
+        "text": "[\n  1,\n  2\n]"
+      },
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "metaSortKey": 0
+    },
+    {
+      "_id": "req_cbd1c7349455449f83c85117",
+      "_type": "request",
+      "parentId": "fld_34356822f3744743a7af1aca",
+      "name": "Upload de imagem de usuário",
+      "description": "",
+      "method": "POST",
+      "url": "{{ _.base_url }}/users/image/1",
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.token }}",
+          "disabled": false
+        }
+      ],
+      "authentication": {},
+      "body": {
+        "mimeType": "multipart/form-data",
+        "params": [
+          {
+            "name": "image",
+            "value": "",
+            "disabled": false,
+            "type": "file",
+            "fileName": ""
+          }
+        ]
+      },
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "metaSortKey": 0
+    }
+  ]
+}

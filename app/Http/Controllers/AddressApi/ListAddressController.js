@@ -1,8 +1,7 @@
-import AddressModel from "../../Models/AddressModel.js";
-import CourseModel from "../../Models/CourseModel.js";
-import UserModel from "../../Models/UserModel.js";
+import AddressModel from "../../../Models/AddressModel.js";
+import UserModel from "../../../Models/UserModel.js";
 
-export default async function ListUserController(request, response) {
+export default async function ListAddressController(request, response) {
     try {
         const pageRequest = Number(request.query.page) || 1;
         const limitRequest = Number(request.query.limit) || 10;
@@ -13,15 +12,11 @@ export default async function ListUserController(request, response) {
 
         let next = null;
 
-        const { rows, count: total } = await UserModel.findAndCountAll({
+        const { rows, count: total } = await AddressModel.findAndCountAll({
             include: [
                 {
-                    model: AddressModel,
-                    as: "addresses"
-                },
-                {
-                    model: CourseModel,
-                    as: "courses"
+                    model: UserModel,
+                    as: "user"
                 }
             ],
             order: [["id", "ASC"]],
@@ -30,11 +25,11 @@ export default async function ListUserController(request, response) {
             distinct: true
         });
 
-        const users = rows;
+        const addresses = rows;
 
-        if (users.length > limit) {
+        if (addresses.length > limit) {
             next = page + 1;
-            users.pop();
+            addresses.pop();
         }
 
         return response.json({
@@ -42,7 +37,7 @@ export default async function ListUserController(request, response) {
             limit: limit,
             total: total,
             next: next,
-            data: users
+            data: addresses
         });
     } catch (error) {
         console.error(error);

@@ -5,8 +5,7 @@ export default function app() {
 
     /** Inicializar variáveis de ambiente */
     dotenv.config({
-        quiet: true,
-        path: process.cwd() + "/.env"
+        quiet: true
     });
 
     /** Relacionamentos */

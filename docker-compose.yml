@@ -50,7 +50,7 @@ services:
     ports:
       - "${POSTGRES_PORT}:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql
+      - postgres-volume:/var/lib/postgresql
       - ./docker/postgres/init:/docker-entrypoint-initdb.d
     networks:
       app-network:
@@ -62,5 +62,5 @@ networks:
     driver: bridge
 
 volumes:
-  postgres_data:
+  postgres-volume:
   nodemodules-volume:
