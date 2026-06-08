@@ -5,20 +5,27 @@ services:
     build:
       context: .
       dockerfile: docker/node-web/Dockerfile
-    env_file: 
-      - .env
-      - .env.docker
-    volumes:
-      - .:/app
-      - nodemodules-volume:/app/node_modules
     depends_on:
       - postgres-container
+      - redis-container
     environment:
+      POSTGRES_DB: ${POSTGRES_DB:-unifaat_dw}
+      POSTGRES_USER: ${POSTGRES_USER:-unifaat_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-unifaat_password}
       POSTGRES_HOST: postgres_host
       POSTGRES_PORT: 5432
+      NODE_WEB_PORT: 3000
+      JWT_SECRET: ${JWT_SECRET:-troque-este-segredo}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@petshop.local}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin123}
+      REDIS_HOST: redis_host
+      REDIS_PORT: 6379
     restart: unless-stopped
     networks:
-      app-network:
+      backend-network:
+        aliases:
+            - nodeweb_host
+      frontend-network:
         aliases:
             - nodeweb_host
 
@@ -29,38 +36,72 @@ services:
       dockerfile: docker/nginx/Dockerfile
     ports:
       - "8080:80"
-    volumes:
-      - ./public:/var/www/public
     depends_on:
       - nodeweb-container
     networks:
-      - app-network
+      - frontend-network
 
   #POSTGRES
   postgres-container:
-    image: postgres:18
+    image: postgres:18-alpine
     restart: unless-stopped
-    env_file:
-      - ./.env
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER:-unifaat_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-unifaat_password}
+      POSTGRES_DB: ${POSTGRES_DB:-unifaat_dw}
       TZ: America/Sao_Paulo
-    ports:
-      - "${POSTGRES_PORT}:5432"
     volumes:
       - postgres-volume:/var/lib/postgresql
-      - ./docker/postgres/init:/docker-entrypoint-initdb.d
     networks:
-      app-network:
+      backend-network:
         aliases:
           - postgres_host
 
+  #REDIS CACHE
+  redis-container:
+    image: redis:8-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-volume:/data
+    networks:
+      backend-network:
+        aliases:
+          - redis_host
+
+  #NODE CLI
+  nodecli-container:
+    build:
+      context: .
+      dockerfile: docker/node-web/Dockerfile
+    depends_on:
+      - postgres-container
+      - redis-container
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-unifaat_dw}
+      POSTGRES_USER: ${POSTGRES_USER:-unifaat_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-unifaat_password}
+      POSTGRES_HOST: postgres_host
+      POSTGRES_PORT: 5432
+      NODE_WEB_PORT: 3000
+      JWT_SECRET: ${JWT_SECRET:-troque-este-segredo}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@petshop.local}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin123}
+      REDIS_HOST: redis_host
+      REDIS_PORT: 6379
+    profiles:
+      - cli
+    command: ["node", "command.js"]
+    networks:
+      backend-network:
+
 networks:
-  app-network:
+  frontend-network:
     driver: bridge
+  backend-network:
+    driver: bridge
+    internal: true
 
 volumes:
   postgres-volume:
-  nodemodules-volume:
+  redis-volume:

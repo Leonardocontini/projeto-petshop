@@ -5,9 +5,7 @@ import GetUserController from '../../app/Http/Controllers/UserApi/GetUserControl
 import CreateUserController from '../../app/Http/Controllers/UserApi/CreateUserController.js';
 import UpdateUserController from '../../app/Http/Controllers/UserApi/UpdateUserController.js';
 import DeleteUserController from '../../app/Http/Controllers/UserApi/DeleteUserController.js';
-import AddCourseController from '../../app/Http/Controllers/UserApi/AddCourseController.js';
 import UploadImageController from '../../app/Http/Controllers/UserApi/UploadImageController.js';
-import LoginController from '../../app/Http/Controllers/LoginController.js';
 import VerifyImageMiddleware from '../../app/Http/Middlewares/VerifyImageMiddleware.js';
 
 export default (() => {
@@ -20,8 +18,6 @@ export default (() => {
     router.post('/', CreateUserController);
 
     router.put('/:id', UpdateUserController);
-
-    router.post('/add-course/:id', AddCourseController);
 
     router.post('/image/:id', VerifyImageMiddleware, UploadImageController);
 

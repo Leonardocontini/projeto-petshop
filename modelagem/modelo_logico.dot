@@ -1,0 +1,65 @@
+digraph ModeloLogico {
+  graph [rankdir=TB, bgcolor="white"];
+  node [shape=plain, fontname="Arial"];
+  edge [color="#334155", fontname="Arial"];
+
+  users [label=<
+    <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+      <TR><TD BGCOLOR="#e2e8f0"><B>users</B></TD></TR>
+      <TR><TD>PK id</TD></TR>
+      <TR><TD>UNIQUE email</TD></TR>
+      <TR><TD>name, password, phone, picture</TD></TR>
+    </TABLE>
+  >];
+
+  addresses [label=<
+    <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+      <TR><TD BGCOLOR="#e2e8f0"><B>addresses</B></TD></TR>
+      <TR><TD>PK id</TD></TR>
+      <TR><TD>FK id_user</TD></TR>
+      <TR><TD>name, district, city</TD></TR>
+    </TABLE>
+  >];
+
+  pets [label=<
+    <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+      <TR><TD BGCOLOR="#e2e8f0"><B>pets</B></TD></TR>
+      <TR><TD>PK id</TD></TR>
+      <TR><TD>FK id_user</TD></TR>
+      <TR><TD>name, species, breed, birth_date</TD></TR>
+    </TABLE>
+  >];
+
+  products [label=<
+    <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+      <TR><TD BGCOLOR="#e2e8f0"><B>products</B></TD></TR>
+      <TR><TD>PK id</TD></TR>
+      <TR><TD>name, category, price, stock</TD></TR>
+    </TABLE>
+  >];
+
+  orders [label=<
+    <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+      <TR><TD BGCOLOR="#e2e8f0"><B>orders</B></TD></TR>
+      <TR><TD>PK id</TD></TR>
+      <TR><TD>FK id_user</TD></TR>
+      <TR><TD>status, total</TD></TR>
+    </TABLE>
+  >];
+
+  order_items [label=<
+    <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+      <TR><TD BGCOLOR="#e2e8f0"><B>order_items</B></TD></TR>
+      <TR><TD>PK id</TD></TR>
+      <TR><TD>FK id_order</TD></TR>
+      <TR><TD>FK id_product</TD></TR>
+      <TR><TD>quantity, unit_price</TD></TR>
+    </TABLE>
+  >];
+
+  users -> addresses;
+  users -> pets;
+  users -> orders;
+  orders -> order_items;
+  products -> order_items;
+}

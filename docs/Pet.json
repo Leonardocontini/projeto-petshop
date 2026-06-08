@@ -1,0 +1,49 @@
+{
+  "paths": {
+    "/pets": {
+      "get": {
+        "summary": "Lista pets cadastrados",
+        "responses": { "200": { "description": "Pets listados" } }
+      },
+      "post": {
+        "summary": "Cadastra um pet para um cliente",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["id_user", "name", "species"],
+                "properties": {
+                  "id_user": { "type": "integer", "example": 1 },
+                  "name": { "type": "string", "example": "Thor" },
+                  "species": { "type": "string", "example": "Cachorro" },
+                  "breed": { "type": "string", "example": "Golden Retriever" },
+                  "birth_date": { "type": "string", "format": "date", "example": "2021-05-20" }
+                }
+              }
+            }
+          }
+        },
+        "responses": { "201": { "description": "Pet cadastrado" } }
+      }
+    },
+    "/pets/{id}": {
+      "get": {
+        "summary": "Busca um pet",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "responses": { "200": { "description": "Pet encontrado" } }
+      },
+      "put": {
+        "summary": "Atualiza um pet",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "responses": { "200": { "description": "Pet atualizado" } }
+      },
+      "delete": {
+        "summary": "Remove um pet",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "responses": { "204": { "description": "Pet removido" } }
+      }
+    }
+  }
+}

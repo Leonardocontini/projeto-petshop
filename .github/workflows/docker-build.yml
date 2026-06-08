@@ -1,0 +1,53 @@
+name: Docker Build
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID_VALUE: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY_VALUE: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION_VALUE: ${{ vars.AWS_REGION }}
+      ECR_REGISTRY_VALUE: ${{ vars.ECR_REGISTRY }}
+      ECR_NODE_REPOSITORY_VALUE: ${{ vars.ECR_NODE_REPOSITORY }}
+      ECR_NGINX_REPOSITORY_VALUE: ${{ vars.ECR_NGINX_REPOSITORY }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Node image
+        run: docker build -f docker/node-web/Dockerfile -t petshop-api-node:${{ github.sha }} .
+
+      - name: Build Nginx image
+        run: docker build -f docker/nginx/Dockerfile -t petshop-api-nginx:${{ github.sha }} .
+
+      - name: Configure AWS credentials
+        if: ${{ env.AWS_ACCESS_KEY_ID_VALUE != '' && env.AWS_SECRET_ACCESS_KEY_VALUE != '' && env.AWS_REGION_VALUE != '' }}
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION_VALUE }}
+
+      - name: Login to Amazon ECR
+        if: ${{ env.AWS_ACCESS_KEY_ID_VALUE != '' && env.AWS_SECRET_ACCESS_KEY_VALUE != '' && env.AWS_REGION_VALUE != '' && env.ECR_REGISTRY_VALUE != '' }}
+        run: aws ecr get-login-password --region "${{ env.AWS_REGION_VALUE }}" | docker login --username AWS --password-stdin "${{ env.ECR_REGISTRY_VALUE }}"
+
+      - name: Push Node image to ECR
+        if: ${{ env.AWS_ACCESS_KEY_ID_VALUE != '' && env.AWS_SECRET_ACCESS_KEY_VALUE != '' && env.AWS_REGION_VALUE != '' && env.ECR_REGISTRY_VALUE != '' && env.ECR_NODE_REPOSITORY_VALUE != '' }}
+        run: |
+          docker tag petshop-api-node:${{ github.sha }} "${{ env.ECR_REGISTRY_VALUE }}/${{ env.ECR_NODE_REPOSITORY_VALUE }}:${{ github.sha }}"
+          docker push "${{ env.ECR_REGISTRY_VALUE }}/${{ env.ECR_NODE_REPOSITORY_VALUE }}:${{ github.sha }}"
+
+      - name: Push Nginx image to ECR
+        if: ${{ env.AWS_ACCESS_KEY_ID_VALUE != '' && env.AWS_SECRET_ACCESS_KEY_VALUE != '' && env.AWS_REGION_VALUE != '' && env.ECR_REGISTRY_VALUE != '' && env.ECR_NGINX_REPOSITORY_VALUE != '' }}
+        run: |
+          docker tag petshop-api-nginx:${{ github.sha }} "${{ env.ECR_REGISTRY_VALUE }}/${{ env.ECR_NGINX_REPOSITORY_VALUE }}:${{ github.sha }}"
+          docker push "${{ env.ECR_REGISTRY_VALUE }}/${{ env.ECR_NGINX_REPOSITORY_VALUE }}:${{ github.sha }}"

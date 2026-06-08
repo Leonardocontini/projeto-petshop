@@ -5,3 +5,4 @@ RUN rm /etc/nginx/conf.d/default.conf
 
 # Copia o novo config
 COPY ./docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY ./public /var/www/public

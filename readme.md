@@ -1,150 +1,275 @@
-# Projeto Desenvolvimento Web - Bimestre 2
+# PetShop API - Desenvolvimento Web
 
-## Instalação e Execução
+## 1. Identificação do Projeto
 
-Siga os passos abaixo para rodar o projeto localmente:
+**Sistema:** PetShop API.
 
----
+**Descrição:** backend REST para uma loja de petshop, com clientes, endereços, pets, produtos, pedidos e itens de pedido. A aplicação possui autenticação JWT, senha criptografada com bcrypt, ORM Sequelize, PostgreSQL e documentação Swagger.
 
-## ⚙️ Configuração da Aplicação
+**Caminho escolhido:** Opção A - Docker/Orquestração Local.
 
-1. Clonar o repositório:
+Arquitetura:
 
-```sh
-git clone https://github.com/luan-tavares/unifaat-2026-dw-project
+```txt
+Host -> Nginx -> Node Web Server -> PostgreSQL
+                         |
+                       Redis
 ```
 
-2. Entrar na pasta do projeto:
+O Node.js não é publicado diretamente no host. O acesso externo acontece pelo Nginx em `http://localhost:8080`.
 
-```sh
-cd unifaat-2026-dw-project
-```
+## 2. Pré-requisitos
 
-3. Instalar as dependências:
+- Docker Desktop com integração WSL2 habilitada.
+- Node.js 24 ou superior, caso rode localmente sem Docker.
+- PostgreSQL 17 ou superior, caso rode localmente sem Docker.
+- Arquivo `.env` somente se desejar sobrescrever as variáveis padrão.
 
-```sh
-npm install
-```
+Crie o `.env` a partir do exemplo quando quiser customizar:
 
-4. Copiar o arquivo `.env` (**escolha apenas um, dependendo do seu sistema**):
-
-Linux / Mac:
 ```sh
 cp .env.example .env
 ```
 
-Windows (CMD):
+Nunca comite senhas, tokens ou chaves reais no repositório.
+
+## 3. Como Subir
+
+Build e execução completa:
+
 ```sh
-copy .env.example .env
+docker compose up --build
 ```
 
-5. Editar o arquivo `.env` e definir a senha do banco (**ALTERE AQUI**):
+Em segundo plano:
 
-```env
-POSTGRES_HOST=localhost
-POSTGRES_DB=unifaat_dw
-POSTGRES_PORT=6789
-POSTGRES_USER=unifaat_user
-POSTGRES_PASSWORD=**COLOQUE_SUA_SENHA_AQUI**
-
-NODE_WEB_PORT=3000
+```sh
+docker compose up -d --build
 ```
 
----
+URL da API:
 
-## 🚀 Servidor Backend Node
+```txt
+http://localhost:8080
+```
 
-6. Iniciar o servidor:
+Swagger:
+
+```txt
+http://localhost:8080/docs
+```
+
+## 4. Entrypoints e Commands
+
+Entrypoint do servidor web:
 
 ```sh
 node _web.js
 ```
 
-O servidor estará disponível em: http://localhost:3000
-
----
-
-## 🐳 Docker
-
-Após configurar o `.env`, basta subir os containers:
+Entrypoint de CLI:
 
 ```sh
-docker compose up
+node command.js
 ```
 
-O servidor web estará disponível em: http://localhost:8080
+Executar migrations manualmente:
 
----
-
-## 🔄 Nodemon (Opcional)
-
-Para desenvolvimento com reload automático:
-
-Global:
 ```sh
-npm install -g nodemon
-nodemon _web.js
+node command.js migrate
 ```
 
-Local:
+Via Docker:
+
 ```sh
-npm install --save-dev nodemon
-./node_modules/.bin/nodemon _web.js
+docker compose --profile cli run --rm nodecli-container node command.js migrate
 ```
 
----
+Ao subir o container web, o entrypoint também executa `node command.js migrate` antes de iniciar o servidor, para que `docker compose up --build` funcione em uma base limpa.
 
-## 🧭 Estrutura do Projeto
+## 5. Entidades e Relacionamentos
 
-- `app/`
-  - Regras de negócio da aplicação.
-  - `app/Controllers/`: controllers que tratam as rotas.
+Tabelas principais:
 
-- `bootstrap/`
-  - Inicialização da aplicação.
-  - `app.js` e `config.js`.
+- `users`: clientes/usuários. Possui `email` único e `password` criptografado com bcrypt.
+- `addresses`: endereços dos clientes.
+- `pets`: pets vinculados aos clientes.
+- `products`: catálogo e estoque da loja.
+- `orders`: pedidos realizados pelos clientes.
+- `order_items`: tabela pivô dos produtos dentro de cada pedido.
 
-- `config/`
-  - Arquivos de configuração.
+Relacionamentos:
 
-- `database/`
-  - Conexões com banco de dados.
-  - `database/connections/`: conexão com Postgres.
+- `users 1:N addresses`
+- `users 1:N pets`
+- `users 1:N orders`
+- `orders N:N products` por meio da tabela pivô `order_items`
 
-- `docker/`
-  - Configurações de containers.
-  - `docker/postgres/init`: scripts de inicialização do banco.
+A tabela pivô `order_items` possui Model própria em `app/Models/OrderItemModel.js`.
 
-- `public/`
-  - Arquivos estáticos.
+## 5.1 Entrega de Banco de Dados
 
-- `routes/`
-  - Definição das rotas HTTP.
+O banco escolhido para o sistema é **PostgreSQL**, um banco SQL relacional. A escolha está documentada em `justificativa/arquitetura.md`.
 
-- `storage/`
-  - Armazenamento de arquivos/dados.
+Artefatos de banco:
 
-- `_web.js`
-  - Entrypoint da aplicação.
+- `modelagem/der.png`: diagrama conceitual.
+- `modelagem/modelo_logico.png`: diagrama lógico.
+- `modelagem/dicionario_dados.md`: dicionário de dados, constraints e índices.
+- `scripts/setup.sql`: DDL completo com PKs, FKs, constraints e índices.
+- `scripts/seed/seed.sql`: carga inicial com mais de 100 registros coerentes.
+- `queries/crud.sql`: exemplos CRUD.
+- `queries/consultas_avancadas.sql`: 5 consultas críticas com `EXPLAIN ANALYZE`.
+- `queries/agregacoes.sql`: consultas de relatório/agregação.
 
-- `.env`
-  - Variáveis de ambiente.
+## 6. Rotas REST
 
-- `.env.example`
-  - Exemplo de variáveis.
+Rota pública:
 
-- `docker-compose.yml`
-  - Orquestração dos containers.
+- `POST /login`: gera token JWT.
 
-- `package.json`
-  - Dependências e scripts.
+Rotas protegidas por JWT:
 
----
+- `GET /users`, `GET /users/:id`, `POST /users`, `PUT /users/:id`, `DELETE /users/:id`
+- `GET /addresses`, `GET /addresses/:id`, `POST /addresses`, `PUT /addresses/:id`, `DELETE /addresses/:id`
+- `GET /pets`, `GET /pets/:id`, `POST /pets`, `PUT /pets/:id`, `DELETE /pets/:id`
+- `GET /products`, `GET /products/:id`, `POST /products`, `PUT /products/:id`, `DELETE /products/:id`
+- `GET /orders`, `GET /orders/:id`, `POST /orders`, `PUT /orders/:id`, `DELETE /orders/:id`
 
-## 📦 Containers Docker
+Também existe middleware próprio de autenticação JWT em `app/Http/Middlewares/AuthMiddleware.js`.
 
-| Container           | Host            | Porta Interna | Porta Externa (localhost) |
-|--------------------|-----------------|---------------|---------------|
-| postgres-container | postgres_host   | 5432          | 6789          |
-| nginx-container | nginx-container   | 80          | 8080          |
-| nodeweb-container | nodeweb_host   | 3000          | -         |
+## 7. Login e JWT
+
+Depois das migrations, um usuário inicial é criado:
+
+```txt
+email: admin@petshop.local
+senha: admin123
+```
+
+Faça login:
+
+```sh
+curl -X POST http://localhost:8080/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@petshop.local","password":"admin123"}'
+```
+
+Use o token retornado:
+
+```http
+Authorization: Bearer SEU_TOKEN
+```
+
+Exemplo de criação de produto:
+
+```sh
+curl -X POST http://localhost:8080/products \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer SEU_TOKEN" \
+  -d '{"name":"Ração premium","description":"Ração para cães adultos","category":"Alimentação","price":129.90,"stock":25}'
+```
+
+Exemplo de criação de pedido:
+
+```json
+{
+  "id_user": 1,
+  "items": [
+    {
+      "id_product": 1,
+      "quantity": 2
+    }
+  ]
+}
+```
+
+## 8. Infraestrutura Docker
+
+Containers:
+
+- `nginx-container`: proxy reverso público na porta `8080`.
+- `nodeweb-container`: servidor Node.js privado, sem porta publicada no host.
+- `postgres-container`: banco PostgreSQL privado na rede backend.
+- `redis-container`: cache Redis privado na rede backend.
+- `nodecli-container`: execução de comandos CLI via profile `cli`.
+
+Redes:
+
+- `frontend-network`: comunicação entre Nginx e Node.
+- `backend-network`: rede interna para Node, PostgreSQL e Redis.
+
+Persistência:
+
+- `postgres-volume`: dados do PostgreSQL.
+- `redis-volume`: dados do Redis.
+
+Imagens:
+
+- O Dockerfile do Node usa multi-stage build.
+- Dependências são instaladas antes da cópia do código para aproveitar cache de camadas.
+- `.dockerignore` evita envio de `node_modules`, `.env`, logs e pastas de IDE ao daemon.
+
+## 9. Bibliotecas
+
+- `express`: servidor HTTP e rotas REST.
+- `sequelize`: ORM.
+- `pg`: driver PostgreSQL.
+- `bcrypt`: criptografia de senhas.
+- `jsonwebtoken`: autenticação JWT.
+- `dotenv`: variáveis de ambiente.
+- `express-fileupload`: upload de imagem.
+- `swagger-ui-express`: documentação Swagger.
+- `chalk`: mensagens de terminal.
+
+## 10. Verificação e Evidências
+
+Validar containers:
+
+```sh
+docker compose ps
+```
+
+Validar logs:
+
+```sh
+docker compose logs nodeweb-container
+docker compose logs nginx-container
+```
+
+Inspecionar rede:
+
+```sh
+docker network inspect unifaat-2026-dw-project_backend-network
+```
+
+Testar persistência:
+
+```sh
+docker compose restart postgres-container
+docker compose exec nodeweb-container node command.js migrate
+```
+
+O banco não possui porta publicada no host; o acesso externo ocorre somente pelo Nginx.
+
+Automação CI/CD:
+
+- Workflow: `.github/workflows/docker-build.yml`
+- O pipeline faz build das imagens Node e Nginx.
+- Se as variáveis/segredos `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `ECR_REGISTRY`, `ECR_NODE_REPOSITORY` e `ECR_NGINX_REPOSITORY` forem configurados no GitHub, o workflow também publica as imagens no Amazon ECR.
+
+## 11. Troubleshooting e Limpeza
+
+Se o Docker não estiver disponível dentro do WSL, habilite a integração em Docker Desktop > Settings > Resources > WSL Integration.
+
+Parar containers:
+
+```sh
+docker compose down
+```
+
+Remover containers e volumes:
+
+```sh
+docker compose down -v
+```

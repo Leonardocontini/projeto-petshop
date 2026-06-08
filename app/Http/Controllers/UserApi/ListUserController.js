@@ -1,6 +1,7 @@
 import AddressModel from "../../../Models/AddressModel.js";
-import CourseModel from "../../../Models/CourseModel.js";
 import UserModel from "../../../Models/UserModel.js";
+import PetModel from "../../../Models/PetModel.js";
+import OrderModel from "../../../Models/OrderModel.js";
 
 export default async function ListUserController(request, response) {
     try {
@@ -20,8 +21,12 @@ export default async function ListUserController(request, response) {
                     as: "addresses"
                 },
                 {
-                    model: CourseModel,
-                    as: "courses"
+                    model: PetModel,
+                    as: "pets"
+                },
+                {
+                    model: OrderModel,
+                    as: "orders"
                 }
             ],
             order: [["id", "ASC"]],

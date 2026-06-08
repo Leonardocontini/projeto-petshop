@@ -1,10 +1,19 @@
 import UserModel from "../../../Models/UserModel.js";
+import AddressModel from "../../../Models/AddressModel.js";
+import PetModel from "../../../Models/PetModel.js";
+import OrderModel from "../../../Models/OrderModel.js";
 
 export default async function GetUserController(request, response) {
     try {
         const { id } = request.params;
 
-        const user = await UserModel.findByPk(id);
+        const user = await UserModel.findByPk(id, {
+            include: [
+                { model: AddressModel, as: "addresses" },
+                { model: PetModel, as: "pets" },
+                { model: OrderModel, as: "orders" }
+            ]
+        });
 
         if (!user) {
             return response.status(404).json({

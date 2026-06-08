@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 
 export default async function CreateUserController(request, response) {
     try {
-        const { name, email, password } = request.body;
+        const { name, email, password, phone } = request.body;
 
         const error = [];
 
@@ -29,7 +29,8 @@ export default async function CreateUserController(request, response) {
         const user = await UserModel.create({
             name: name,
             email: email,
-            password: hashedPassword
+            password: hashedPassword,
+            phone: phone || null
         });
 
         return response.status(201).json(user);

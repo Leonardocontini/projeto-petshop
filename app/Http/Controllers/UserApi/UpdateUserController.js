@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 export default async function UpdateUserController(request, response) {
     try {
         const { id } = request.params;
-        const { name, email, password } = request.body;
+        const { name, email, password, phone } = request.body;
 
         if (!name || !email) {
             return response.status(400).json({
@@ -22,6 +22,7 @@ export default async function UpdateUserController(request, response) {
 
         user.name = name;
         user.email = email;
+        user.phone = phone || null;
 
         // Se password foi fornecido, criptografa e atualiza
         if (password) {

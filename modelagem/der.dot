@@ -1,0 +1,18 @@
+digraph DER {
+  graph [rankdir=LR, bgcolor="white"];
+  node [shape=record, style="rounded,filled", fillcolor="#f8fafc", color="#334155", fontname="Arial"];
+  edge [color="#475569", fontname="Arial"];
+
+  users [label="{users|id PK\lname\lemail UNIQUE\lpassword\lphone\lpicture\l}"];
+  addresses [label="{addresses|id PK\lid_user FK\lname\ldistrict\lcity\l}"];
+  pets [label="{pets|id PK\lid_user FK\lname\lspecies\lbreed\lbirth_date\l}"];
+  products [label="{products|id PK\lname\ldescription\lcategory\lprice\lstock\l}"];
+  orders [label="{orders|id PK\lid_user FK\lstatus\ltotal\l}"];
+  order_items [label="{order_items|id PK\lid_order FK\lid_product FK\lquantity\lunit_price\l}"];
+
+  users -> addresses [label="1:N"];
+  users -> pets [label="1:N"];
+  users -> orders [label="1:N"];
+  orders -> order_items [label="1:N"];
+  products -> order_items [label="1:N"];
+}

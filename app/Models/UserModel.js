@@ -26,6 +26,11 @@ const UserModel = sequelize.define(
             allowNull: false
         },
 
+        phone: {
+            type: DataTypes.TEXT,
+            allowNull: true
+        },
+
         picture: {
             type: DataTypes.TEXT,
             allowNull: true

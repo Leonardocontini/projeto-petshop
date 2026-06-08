@@ -12,7 +12,9 @@ import GetFileController from '../app/Http/Controllers/GetFileController.js';
 import Return404Controller from '../app/Http/Controllers/Return404Controller.js';
 import userRouter from './apis/userRouter.js';
 import addressRouter from './apis/addressRouter.js';
-import courseRouter from './apis/courseRouter.js';
+import productRouter from './apis/productRouter.js';
+import petRouter from './apis/petRouter.js';
+import orderRouter from './apis/orderRouter.js';
 import fileUpload from 'express-fileupload';
 import swaggerUi from 'swagger-ui-express';
 import LoginController from '../app/Http/Controllers/LoginController.js';
@@ -73,14 +75,20 @@ router.use('/docs', swaggerUi.serve, swaggerUi.setup(SwaggerDoc()));
 /** Login */
 router.post('/login', LoginController);
 
-/** Router para usuários */
+/** Router para clientes */
 router.use("/users", AuthMiddleware, userRouter);
 
 /** Router para endereços */
 router.use("/addresses", AuthMiddleware, addressRouter);
 
-/** Router para cursos */
-router.use("/courses", AuthMiddleware, courseRouter);
+/** Router para produtos */
+router.use("/products", AuthMiddleware, productRouter);
+
+/** Router para pets */
+router.use("/pets", AuthMiddleware, petRouter);
+
+/** Router para pedidos */
+router.use("/orders", AuthMiddleware, orderRouter);
 
 /**
  * Fallback 404 para requisições não encontradas
@@ -90,4 +98,3 @@ router.use("/courses", AuthMiddleware, courseRouter);
 router.use(Return404Controller);
 
 export default router;
-

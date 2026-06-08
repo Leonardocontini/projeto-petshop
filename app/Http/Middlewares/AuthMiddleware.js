@@ -37,7 +37,7 @@ export default function AuthMiddleware(request, response, next) {
         const token = parts[1];
 
         // Verifica e decodifica o JWT
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || "petshop-dev-secret");
 
         // Armazena os dados do token no request para uso no controlador
         request.user = decoded;

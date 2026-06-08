@@ -3,7 +3,7 @@
     "info": {
         "title": "User API",
         "version": "1.0.0",
-        "description": "API de usuários - operações CRUD e vinculação de cursos"
+        "description": "API de usuários/clientes - operações CRUD"
     },
     "paths": {
         "/users": {
@@ -60,6 +60,9 @@
                                         "type": "string"
                                     },
                                     "password": {
+                                        "type": "string"
+                                    },
+                                    "phone": {
                                         "type": "string"
                                     }
                                 },
@@ -142,6 +145,9 @@
                                     },
                                     "password": {
                                         "type": "string"
+                                    },
+                                    "phone": {
+                                        "type": "string"
                                     }
                                 },
                                 "required": [
@@ -186,50 +192,6 @@
                     },
                     "404": {
                         "description": "Usuário não encontrado"
-                    }
-                }
-            }
-        },
-        "/users/add-course/{id}": {
-            "post": {
-                "summary": "Adicionar cursos a usuário",
-                "description": "Associa múltiplos cursos ao usuário via tabela pivot",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "array",
-                                "items": {
-                                    "type": "integer"
-                                }
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Cursos adicionados",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Usuário ou curso não encontrado"
                     }
                 }
             }

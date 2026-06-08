@@ -1,0 +1,53 @@
+{
+  "paths": {
+    "/products": {
+      "get": {
+        "summary": "Lista produtos do petshop",
+        "parameters": [
+          { "name": "page", "in": "query", "schema": { "type": "integer" } },
+          { "name": "limit", "in": "query", "schema": { "type": "integer" } }
+        ],
+        "responses": { "200": { "description": "Produtos listados" } }
+      },
+      "post": {
+        "summary": "Cria um produto",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["name", "category", "price", "stock"],
+                "properties": {
+                  "name": { "type": "string", "example": "Ração premium" },
+                  "description": { "type": "string", "example": "Ração para cães adultos" },
+                  "category": { "type": "string", "example": "Alimentação" },
+                  "price": { "type": "number", "example": 129.9 },
+                  "stock": { "type": "integer", "example": 25 }
+                }
+              }
+            }
+          }
+        },
+        "responses": { "201": { "description": "Produto criado" } }
+      }
+    },
+    "/products/{id}": {
+      "get": {
+        "summary": "Busca um produto",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "responses": { "200": { "description": "Produto encontrado" }, "404": { "description": "Produto não encontrado" } }
+      },
+      "put": {
+        "summary": "Atualiza um produto",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "responses": { "200": { "description": "Produto atualizado" } }
+      },
+      "delete": {
+        "summary": "Remove um produto",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "responses": { "204": { "description": "Produto removido" } }
+      }
+    }
+  }
+}

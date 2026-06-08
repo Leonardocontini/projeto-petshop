@@ -8,7 +8,9 @@ export default function app() {
         quiet: true
     });
 
-    /** Relacionamentos */
+    process.env.JWT_SECRET = process.env.JWT_SECRET || "petshop-dev-secret";
+    process.env.NODE_WEB_PORT = process.env.NODE_WEB_PORT || "3000";
 
+    /** Relacionamentos */
     initRelations();
 }

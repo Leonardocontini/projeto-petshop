@@ -15,9 +15,9 @@ export default function DocSwaggerController() {
     const combined = {
         openapi: '3.0.0',
         info: {
-            title: 'API Documentation',
+            title: 'PetShop API Documentation',
             version: '1.0.0',
-            description: 'Documentação unificada dos recursos User, Course, Address e Login'
+            description: 'Documentação unificada dos recursos da loja de petshop'
         },
         tags: [],
         paths: {},

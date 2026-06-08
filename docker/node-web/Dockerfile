@@ -1,19 +1,32 @@
-# Usa imagem oficial do Node 25
-FROM node:25
+FROM node:25-alpine AS deps
 
-# Entra de trabalho
 WORKDIR /app
 
-# Copia arquivos necessários para instalar as dependencia node_modules EM TEMPO DE BUILD
 COPY package*.json ./
-COPY _web.js ./
+RUN npm ci --omit=dev
 
-# Instala dependências + nodemon para "ouvir" as mudanças
-RUN npm install -g nodemon && npm install
+FROM node:25-alpine AS runtime
 
-# Expõe a porta usada pelo Express (ajuste conforme necessário)
-# Foi comentado pois foi exposto no docker compose
-# EXPOSE 3000
+ENV NODE_ENV=production
+WORKDIR /app
 
-# Comando padrão ao iniciar o container
-ENTRYPOINT ["nodemon", "_web.js"]
+COPY --from=deps /app/node_modules ./node_modules
+COPY package*.json ./
+COPY _web.js command.js ./
+COPY app ./app
+COPY bootstrap ./bootstrap
+COPY database ./database
+COPY docs ./docs
+COPY public ./public
+COPY routes ./routes
+COPY storage ./storage
+COPY docker/node-web/entrypoint.sh ./entrypoint.sh
+
+RUN chmod +x ./entrypoint.sh \
+    && mkdir -p storage/users storage/logs \
+    && chown -R node:node /app
+
+USER node
+
+ENTRYPOINT ["./entrypoint.sh"]
+CMD ["node", "_web.js"]
