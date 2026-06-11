@@ -120,6 +120,7 @@ Artefatos de banco:
 - `scripts/seed/seed.sql`: carga inicial com mais de 100 registros coerentes.
 - `queries/crud.sql`: exemplos CRUD.
 - `queries/consultas_avancadas.sql`: 5 consultas críticas com `EXPLAIN ANALYZE`.
+- `queries/consultas_criticas.md`: explicação das consultas críticas e evidências de otimização.
 - `queries/agregacoes.sql`: consultas de relatório/agregação.
 
 ## 6. Rotas REST
@@ -190,7 +191,7 @@ Containers:
 
 - `nginx-container`: proxy reverso público na porta `8080`.
 - `nodeweb-container`: servidor Node.js privado, sem porta publicada no host.
-- `postgres-container`: banco PostgreSQL privado na rede backend.
+- `postgres-container`: banco PostgreSQL usado pela aplicação e publicado no host na porta `6789` para inspeção via Beekeeper Studio.
 - `redis-container`: cache Redis privado na rede backend.
 - `nodecli-container`: execução de comandos CLI via profile `cli`.
 
@@ -250,7 +251,7 @@ docker compose restart postgres-container
 docker compose exec nodeweb-container node command.js migrate
 ```
 
-O banco não possui porta publicada no host; o acesso externo ocorre somente pelo Nginx.
+O acesso à API ocorre pelo Nginx. Para inspeção do banco em ferramentas como Beekeeper Studio, o PostgreSQL está publicado em `localhost:6789`.
 
 Automação CI/CD:
 
